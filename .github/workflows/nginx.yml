@@ -24,7 +24,7 @@ jobs:
           repo="dyeh123/nginx"
           source .github/workflows/utils.sh
           echo "amd64"
-          alpine_x86_sha=$(get_variant_sha "alpine" "latest" "amd64")
+          alpine_x86_sha=$(get_variant_sha "alpine" "3.13" "amd64")
           echo $alpine_x86_sha
           variant_nginx_x86_sha=$(get_manifest_sha "$repo:latest" "amd64")
           echo $variant_nginx_x86_sha
@@ -34,14 +34,14 @@ jobs:
           variant_rpi_sha=$(get_manifest_sha "$repo:latest" "arm")
           echo $variant_rpi_sha
           echo "arm64"
-          alpine_arm64_sha=$(get_variant_sha "alpine" "latest" "arm64")
+          alpine_arm64_sha=$(get_variant_sha "alpine" "3.13" "arm64")
           echo $alpine_arm64_sha
           variant_alpine_arm64_sha=$(get_manifest_sha "$repo:latest" "arm64")
           echo $variant_nginx_arm64_sha
           docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-          build_image "treehouses/alpine:latest" amd64 $repo
+          build_image "alpine:3.13" amd64 $repo
           build_image "treehouses/alpine:latest" arm $repo
-          build_image "treehouses/alpine:latest" arm64 $repo
+          build_image "alpine:3.13" arm64 $repo
           echo "change"
           flag=$(compare_sha  "$alpine_x86_sha" "$variant_nginx_x86_sha" "$balena_rpi_sha" "$variant_rpi_sha" "$alpine_arm64_sha" "$variant_nginx_arm64_sha")
           echo $flag
